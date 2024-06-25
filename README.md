@@ -1,6 +1,6 @@
 # Auto
 
-Auto is a browser extension designed to enhance meeting experiences by joining alongside the user and providing decision-making support.
+Auto is a browser extension designed to enhance meeting experiences, this project is part of the Nights & Weekends program by Buildspace.
 
 ## Description
 
