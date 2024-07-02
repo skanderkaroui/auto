@@ -13,20 +13,17 @@ credentials = {
 }
 graph_client = GraphServiceClient(credentials, scopes=["https://graph.microsoft.com/.default"])
 
-# Define the media prompt
-media_prompt = MediaPrompt(
+# Create the request body
+request_body = PlayPromptPostRequestBody(
+    client_context="d45324c1-fcb5-430a-902c-f20af696537c",
+    prompts= MediaPrompt(
     odata_type="#microsoft.graph.mediaPrompt",
     media_info=MediaInfo(
         odata_type="#microsoft.graph.mediaInfo",
         uri="https://cdn.contoso.com/beep.wav",
         resource_id="1D6DE2D4-CD51-4309-8DAA-70768651088E"
-    )
-)
-
-# Create the request body
-request_body = PlayPromptPostRequestBody(
-    client_context="d45324c1-fcb5-430a-902c-f20af696537c",
-    prompts=[media_prompt]
+    ),
+),
 )
 
 # Call the API to play the prompt
