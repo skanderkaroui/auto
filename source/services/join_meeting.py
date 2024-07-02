@@ -1,9 +1,7 @@
 import requests
-from keys.authentications import get_access_token, TENANT_ID
+from keys.authentications import get_access_token, TENANT_ID, meeting_link_url
 
 # Define the meeting link URL as a variable
-meeting_link_url = "https://teams.microsoft.com/l/meetup-join/19%3ameeting_YOUR_MEETING_ID_HERE%40thread.v2/0?context=%7b%22Tid%22%3a%22YOUR_TENANT_ID%22%2c%22Oid%22%3a%22YOUR_OBJECT_ID%22%7d"
-
 access_token = get_access_token()
 
 join_meeting_url = "https://graph.microsoft.com/v1.0/communications/calls"
