@@ -4,6 +4,7 @@ from msgraph.generated.communications.calls.item.play_prompt.play_prompt_post_re
 from msgraph.generated.models.media_prompt import MediaPrompt
 from msgraph.generated.models.media_info import MediaInfo
 from keys.authentications import get_access_token
+from source.services.join_meeting import call_id
 
 # Initialize the GraphServiceClient with your credentials
 access_token = get_access_token()
@@ -29,7 +30,6 @@ request_body = PlayPromptPostRequestBody(
 )
 
 # Call the API to play the prompt
-call_id = "your-call-id"  # Replace with the actual call ID obtained in join_meeting.py
 result = graph_client.communications.calls.by_call_id(call_id).play_prompt.post(request_body)
 
 print(result)  # This will show the response from the API
