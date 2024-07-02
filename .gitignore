@@ -1,3 +1,3 @@
 .env
 keys
-source\services\__pycache__
+source/services/__pycache__/
