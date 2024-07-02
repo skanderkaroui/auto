@@ -1,6 +1,6 @@
 # join_meeting.py
 import requests
-from keys.authentifications import get_access_token
+from keys.authentications import get_access_token
 
 access_token = get_access_token()
 
