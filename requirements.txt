@@ -6,6 +6,10 @@ scipy
 sounddevice
 google-cloud-speech
 
+#fast whisper + pyaudio
+faster-whisper
+pyaudio
+
 #Microsoft Graph API
 requests
 msal
