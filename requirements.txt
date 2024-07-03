@@ -4,6 +4,7 @@ coqui-tts
 sounddevice
 scipy
 sounddevice
+google-cloud-speech
 
 #Microsoft Graph API
 requests
