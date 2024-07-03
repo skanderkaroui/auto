@@ -1,8 +1,11 @@
+#ML model
 openai
 coqui-tts
 sounddevice
 scipy
 sounddevice
+
+#Microsoft Graph API
 requests
 msal
 msgraph-sdk
