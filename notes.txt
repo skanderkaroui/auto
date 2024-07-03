@@ -3,3 +3,6 @@ ERROR: Failed building wheel for coqui-tts
         error: Microsoft Visual C++ 14.0 or greater is required. Get it with "Microsoft C++ Build Tools"
                 ---> 
                     problem: Update Microsoft Visual C++
+
+
+install Google Cloud CLI for STT API
