@@ -1,3 +1,4 @@
 .env
 keys
 **/__pycache__/
+input.wav
