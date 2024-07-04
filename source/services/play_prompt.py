@@ -4,7 +4,7 @@ from msgraph.generated.communications.calls.item.play_prompt.play_prompt_post_re
 from msgraph.generated.models.media_prompt import MediaPrompt
 from msgraph.generated.models.media_info import MediaInfo
 from keys.authentications import get_access_token
-from source.services.join_meeting import call_id
+from source.azure_integration.join_meeting import call_id
 
 # Initialize the GraphServiceClient with your credentials
 access_token = get_access_token()
