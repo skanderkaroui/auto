@@ -1,13 +1,14 @@
-from openai import OpenAI
+import torch
+from TTS.api import TTS
 
-client = OpenAI()
+# Function to convert text to speech
+def text_to_speech(text, output_path="output.wav"):
+    # Initialize the TTS model
+    model = TTS(model_name="tts_models/en/ljspeech/tacotron2-DDC", progress_bar=False, gpu=torch.cuda.is_available())
 
+    # Generate speech
+    model.tts_to_file(text=text, file_path=output_path)
 
-response = client.chat.completions.create(
-  model="gpt-3.5-turbo",
-  messages=[
-    {"role": "system", "content": "You are a business meeting assistant designed to help businesses make better decisions."},
-  ],
-  prompt= "Give me your opinion about this."
-)
-
+if __name__ == "__main__":
+    sample_text = "This is a sample text to be converted to speech."
+    text_to_speech(sample_text)
