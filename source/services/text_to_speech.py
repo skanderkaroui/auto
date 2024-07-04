@@ -1,6 +1,9 @@
 import torch
 from TTS.api import TTS
 
+
+device = "cuda" if torch.device.is_available() else "cpu"
+
 # Function to convert text to speech
 def text_to_speech(text, output_path="output.wav"):
     # Initialize the TTS model
