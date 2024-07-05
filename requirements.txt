@@ -1,16 +1,16 @@
-#ML model
+### ML model
 openai
 coqui-tts
 sounddevice
 scipy
 sounddevice
-google-cloud-speech
+# google-cloud-speech
 
-#fast whisper + pyaudio
+### fast whisper + pyaudio
 faster-whisper
 pyaudio
 
-#Microsoft Graph API
+### Microsoft Graph API
 requests
 msal
 msgraph-sdk
