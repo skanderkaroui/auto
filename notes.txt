@@ -5,7 +5,7 @@ ERROR: Failed building wheel for coqui-tts
                     problem: Update Microsoft Visual C++
 
 
-install Google Cloud CLI for STT API
+install Google Cloud CLI for STT API -- might not need it
 
-
+** installation command for running CUDA
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
