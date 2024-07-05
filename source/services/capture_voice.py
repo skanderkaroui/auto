@@ -5,6 +5,8 @@ from queue import Queue
 from faster_whisper import WhisperModel
 import torch
 
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 
 # Function to transcribe a chunk of audio
 def transcribe_chunk(model, file_path):
@@ -34,7 +36,7 @@ def capture_voice(queue: Queue):
     model = WhisperModel(model_size, device=device, compute_type="float16")
 
     p = pyaudio.PyAudio()
-    stream = p.open(formatranscribe_chunkt=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
+    stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000, input=True, frames_per_buffer=1024)
 
     accumulated_transcription = ""
 
