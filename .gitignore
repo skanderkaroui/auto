@@ -2,3 +2,5 @@
 keys
 **/__pycache__/
 input.wav
+log.txt
+temp_chunk.wav
