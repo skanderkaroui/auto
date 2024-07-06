@@ -1,13 +1,13 @@
 ### ML model
 openai
 coqui-tts
-sounddevice
 scipy
 sounddevice
 # google-cloud-speech
 
 ### fast whisper + pyaudio
-faster-whisper
+faster-whisper >= 0.10.0
+sounddevice >= 0.4.6
 pyaudio
 
 ### Microsoft Graph API
