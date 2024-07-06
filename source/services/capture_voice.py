@@ -44,9 +44,11 @@ def capture_voice(queue: Queue):
         while True:
             chunk_file = "temp_chunk.wav"
             record_chunk(p, stream, chunk_file, chunk_length=1)  # Adjust chunk length as needed
-            transcription = (model, chunk_file)
+            transcription = transcribe_chunk(model, chunk_file)
             print(transcription)
             os.remove(chunk_file)
+
+            accumulated_transcription += transcription + " "
             queue.put(transcription)
     except KeyboardInterrupt:
         print("Stopping...")
