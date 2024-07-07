@@ -5,15 +5,13 @@ import threading
 from faster_whisper import WhisperModel
 from .audio_transcriber import AppOptions
 from .audio_transcriber import AudioTranscriber
-from .utils.audio_utils import get_valid_input_devices, base64_to_audio
-from .utils.file_utils import read_json, write_json, write_audio
-from .websoket_server import WebSocketServer
+from utils.audio_utils import get_valid_input_devices, base64_to_audio
+from utils.file_utils import read_json, write_json, write_audio
 from .openai_api import OpenAIAPI
 
 transcriber: AudioTranscriber = None
 event_loop: asyncio.AbstractEventLoop = None
 thread: threading.Thread = None
-websocket_server: WebSocketServer = None
 openai_api: OpenAIAPI = None
 
 def get_valid_devices():
@@ -50,7 +48,7 @@ def get_user_settings():
     return user_settings
 
 def start_transcription(user_settings):
-    global transcriber, event_loop, thread, websocket_server, openai_api
+    global transcriber, event_loop, thread, openai_api
     try:
         (
             filtered_app_settings,
@@ -62,12 +60,6 @@ def start_transcription(user_settings):
         app_settings = AppOptions(**filtered_app_settings)
         event_loop = asyncio.new_event_loop()
 
-        if app_settings.use_websocket_server:
-            websocket_server = WebSocketServer(event_loop)
-            asyncio.run_coroutine_threadsafe(
-                websocket_server.start_server(), event_loop
-            )
-
         if app_settings.use_openai_api:
             openai_api = OpenAIAPI()
 
@@ -76,7 +68,7 @@ def start_transcription(user_settings):
             whisper_model,
             filtered_transcribe_settings,
             app_settings,
-            websocket_server,
+            None,
             openai_api,
         )
         asyncio.set_event_loop(event_loop)
@@ -88,7 +80,7 @@ def start_transcription(user_settings):
         print(f"Error: {str(e)}")
 
 def stop_transcription():
-    global transcriber, event_loop, thread, websocket_server, openai_api
+    global transcriber, event_loop, thread, openai_api
     if transcriber is None:
         print("Transcription stopped.")
         return
@@ -97,12 +89,6 @@ def stop_transcription():
     )
     transcriber_future.result()
 
-    if websocket_server is not None:
-        websocket_server_future = asyncio.run_coroutine_threadsafe(
-            websocket_server.stop_server(), event_loop
-        )
-        websocket_server_future.result()
-
     if thread.is_alive():
         event_loop.call_soon_threadsafe(event_loop.stop)
         thread.join()
@@ -110,7 +96,6 @@ def stop_transcription():
     transcriber = None
     event_loop = None
     thread = None
-    websocket_server = None
     openai_api = None
 
     print("Transcription stopped.")
