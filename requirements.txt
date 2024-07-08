@@ -1,6 +1,6 @@
 ### ML model
 openai
-coqui-tts
+# coqui-tts
 scipy
 sounddevice
 # google-cloud-speech
@@ -12,5 +12,5 @@ pyaudio
 
 ### Microsoft Graph API
 requests
-msal
-msgraph-sdk
+# msal
+# msgraph-sdk
