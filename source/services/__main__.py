@@ -12,7 +12,6 @@ from .openai_api import OpenAIAPI
 transcriber: AudioTranscriber = None
 event_loop: asyncio.AbstractEventLoop = None
 thread: threading.Thread = None
-openai_api: OpenAIAPI = None
 
 def get_valid_devices():
     devices = get_valid_input_devices()
@@ -68,7 +67,6 @@ def start_transcription(user_settings):
             whisper_model,
             filtered_transcribe_settings,
             app_settings,
-            None,
             openai_api,
         )
         asyncio.set_event_loop(event_loop)
@@ -120,7 +118,6 @@ def audio_transcription(user_settings, base64data):
             whisper_model,
             filtered_transcribe_settings,
             app_settings,
-            None,
             openai_api,
         )
 
