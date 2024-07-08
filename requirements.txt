@@ -1,16 +1,20 @@
 ### ML model
-openai
+openai~=1.35.10
 # coqui-tts
 scipy
-sounddevice
+sounddevice~=0.4.7
 # google-cloud-speech
 
 ### fast whisper + pyaudio
 faster-whisper >= 0.10.0
 sounddevice >= 0.4.6
-pyaudio
-soundfile
-librosa
+pyaudio~=0.2.14
+soundfile~=0.12.1
+librosa~=0.10.2.post1
+
+torch~=2.3.1+cu118
+numpy~=1.26.3
+onnxruntime~=1.18.1
 
 ### Microsoft Graph API
 requests
