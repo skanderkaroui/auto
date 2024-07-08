@@ -1,6 +1,5 @@
 import asyncio
 import functools
-import eel
 import queue
 import numpy as np
 
@@ -8,10 +7,9 @@ from typing import NamedTuple
 from faster_whisper import WhisperModel
 from concurrent.futures import ThreadPoolExecutor
 
-from .utils.audio_utils import create_audio_stream
+from utils.audio_utils import create_audio_stream
 from .vad import Vad
-from .utils.file_utils import write_audio
-from .websoket_server import WebSocketServer
+from utils.file_utils import write_audio
 from .openai_api import OpenAIAPI
 
 
@@ -22,7 +20,6 @@ class AppOptions(NamedTuple):
     non_speech_threshold: float = 0.1
     include_non_speech: bool = False
     create_audio_file: bool = True
-    use_websocket_server: bool = False
     use_openai_api: bool = False
 
 
@@ -33,14 +30,12 @@ class AudioTranscriber:
         whisper_model: WhisperModel,
         transcribe_settings: dict,
         app_options: AppOptions,
-        websocket_server: WebSocketServer,
         openai_api: OpenAIAPI,
     ):
         self.event_loop = event_loop
         self.whisper_model: WhisperModel = whisper_model
         self.transcribe_settings = transcribe_settings
         self.app_options = app_options
-        self.websocket_server = websocket_server
         self.openai_api = openai_api
         self.vad = Vad(app_options.non_speech_threshold)
         self.silence_counter: int = 0
@@ -77,15 +72,13 @@ class AudioTranscriber:
                     segments, _ = await self.event_loop.run_in_executor(executor, func)
 
                     for segment in segments:
-                        eel.display_transcription(segment.text)
-                        if self.websocket_server is not None:
-                            await self.websocket_server.send_message(segment.text)
+                        print(segment.text)
 
                 except queue.Empty:
                     # Skip to the next iteration if a timeout occurs
                     continue
                 except Exception as e:
-                    eel.on_recive_message(str(e))
+                    print(str(e))
 
     def process_audio(self, audio_data: np.ndarray, frames: int, time, status):
         is_speech = self.vad.is_speech(audio_data)
@@ -137,12 +130,10 @@ class AudioTranscriber:
                 }
             )
 
-        eel.transcription_clear()
-
         if self.openai_api is not None:
             self.text_proofreading(segment_list)
         else:
-            eel.on_recive_segments(segment_list)
+            print(segment_list)
 
     def text_proofreading(self, segment_list: list):
         # Use [#] as a separator
@@ -150,21 +141,21 @@ class AudioTranscriber:
         result = self.openai_api.text_proofreading(combined_text)
         split_text = result.split("[#]")
 
-        del split_text[0]
+        del split_text
 
-        eel.display_transcription("Before text proofreading.")
-        eel.on_recive_segments(segment_list)
+        print("Before text proofreading.")
+        print(segment_list)
 
         if len(split_text) == len(segment_list):
             for i, segment in enumerate(segment_list):
                 segment["text"] = split_text[i]
                 segment["words"] = []
-            eel.on_recive_message("proofread success.")
-            eel.display_transcription("After text proofreading.")
-            eel.on_recive_segments(segment_list)
+            print("proofread success.")
+            print("After text proofreading.")
+            print(segment_list)
         else:
-            eel.on_recive_message("proofread failure.")
-            eel.on_recive_message(result)
+            print("proofread failure.")
+            print(result)
 
     async def start_transcription(self):
         try:
@@ -177,11 +168,11 @@ class AudioTranscriber:
             self._transcribe_task = asyncio.run_coroutine_threadsafe(
                 self.transcribe_audio(), self.event_loop
             )
-            eel.on_recive_message("Transcription started.")
+            print("Transcription started.")
             while self._running.is_set():
                 await asyncio.sleep(1)
         except Exception as e:
-            eel.on_recive_message(str(e))
+            print(str(e))
 
     async def stop_transcription(self):
         try:
@@ -201,8 +192,8 @@ class AudioTranscriber:
                 self.stream.stop()
                 self.stream.close()
                 self.stream = None
-                eel.on_recive_message("Transcription stopped.")
+                print("Transcription stopped.")
             else:
-                eel.on_recive_message("No active stream to stop.")
+                print("No active stream to stop.")
         except Exception as e:
-            eel.on_recive_message(str(e))
+            print(str(e))
