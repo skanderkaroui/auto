@@ -14,7 +14,7 @@ from vad import Vad
 
 
 class AppOptions(NamedTuple):
-    audio_device: int
+    audio_device: int = 1
     silence_limit: int = 8
     noise_threshold: int = 5
     non_speech_threshold: float = 0.1
