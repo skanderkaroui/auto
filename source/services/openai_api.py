@@ -19,7 +19,7 @@ class OpenAIAPI:
             messages=[
                 {
                     "role": "system",
-                    "content": "Please proofread. Please return only the proofreading results.",
+                    "content": "Act as a business meeting assistant designed to help businesses make better decisions.",
                 },
                 {"role": "user", "content": text},
             ]
