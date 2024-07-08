@@ -112,7 +112,7 @@ class AudioTranscriber:
 
         for segment in segments:
             word_list = []
-            if self.transcribe_settings["word_timestamps"] == True:
+            if self.transcribe_settings["word_timestamps"]:
                 for word in segment.words:
                     word_list.append(
                         {
