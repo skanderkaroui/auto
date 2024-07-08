@@ -13,6 +13,7 @@ from source.utils.file_utils import read_json, write_json, write_audio
 transcriber: AudioTranscriber = None
 event_loop: asyncio.AbstractEventLoop = None
 thread: threading.Thread = None
+openai_api: OpenAIAPI = None
 
 
 def get_valid_devices():
@@ -78,7 +79,12 @@ def start_transcription(user_settings):
         thread = threading.Thread(target=event_loop.run_forever, daemon=True)
         thread.start()
 
-        asyncio.run_coroutine_threadsafe(transcriber.start_transcription(), event_loop)
+        transcription_future = asyncio.run_coroutine_threadsafe(
+            transcriber.start_transcription(), event_loop
+        )
+        transcription_result = transcription_future.result()
+        print("Transcription Result:")
+        print(transcription_result)
     except Exception as e:
         print(f"Error: {str(e)}")
 
