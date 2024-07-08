@@ -3,15 +3,17 @@ import sys
 import threading
 
 from faster_whisper import WhisperModel
-from .audio_transcriber import AppOptions
-from .audio_transcriber import AudioTranscriber
-from utils.audio_utils import get_valid_input_devices, base64_to_audio
-from utils.file_utils import read_json, write_json, write_audio
-from .openai_api import OpenAIAPI
+
+from audio_transcriber import AppOptions
+from audio_transcriber import AudioTranscriber
+from openai_api import OpenAIAPI
+from source.utils.audio_utils import get_valid_input_devices, base64_to_audio
+from source.utils.file_utils import read_json, write_json, write_audio
 
 transcriber: AudioTranscriber = None
 event_loop: asyncio.AbstractEventLoop = None
 thread: threading.Thread = None
+
 
 def get_valid_devices():
     devices = get_valid_input_devices()
@@ -23,6 +25,7 @@ def get_valid_devices():
         for d in devices
     ]
 
+
 def get_dropdown_options():
     data_types = ["model_sizes", "compute_types", "languages"]
 
@@ -32,6 +35,7 @@ def get_dropdown_options():
         dropdown_options[data_type] = data[data_type]
 
     return dropdown_options
+
 
 def get_user_settings():
     data_types = ["app_settings", "model_settings", "transcribe_settings"]
@@ -45,6 +49,7 @@ def get_user_settings():
         print(f"Error: {str(e)}")
 
     return user_settings
+
 
 def start_transcription(user_settings):
     global transcriber, event_loop, thread, openai_api
@@ -77,6 +82,7 @@ def start_transcription(user_settings):
     except Exception as e:
         print(f"Error: {str(e)}")
 
+
 def stop_transcription():
     global transcriber, event_loop, thread, openai_api
     if transcriber is None:
@@ -97,6 +103,7 @@ def stop_transcription():
     openai_api = None
 
     print("Transcription stopped.")
+
 
 def audio_transcription(user_settings, base64data):
     global transcriber, openai_api
@@ -131,17 +138,21 @@ def audio_transcription(user_settings, base64data):
 
     openai_api = None
 
+
 def get_filtered_app_settings(settings):
     valid_keys = AppOptions.__annotations__.keys()
     return {k: v for k, v in settings.items() if k in valid_keys}
+
 
 def get_filtered_model_settings(settings):
     valid_keys = WhisperModel.__init__.__annotations__.keys()
     return {k: v for k, v in settings.items() if k in valid_keys}
 
+
 def get_filtered_transcribe_settings(settings):
     valid_keys = WhisperModel.transcribe.__annotations__.keys()
     return {k: v for k, v in settings.items() if k in valid_keys}
+
 
 def extracting_each_setting(user_settings):
     filtered_app_settings = get_filtered_app_settings(user_settings["app_settings"])
@@ -164,12 +175,14 @@ def extracting_each_setting(user_settings):
 
     return filtered_app_settings, filtered_model_settings, filtered_transcribe_settings
 
+
 def on_close():
     print("Application was closed")
 
     if transcriber and transcriber.transcribing:
         stop_transcription()
     sys.exit()
+
 
 if __name__ == "__main__":
     # Place to start the application without eel

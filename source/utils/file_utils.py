@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import soundfile as sf
 
 script_dir = os.path.dirname(os.path.abspath(__file__))

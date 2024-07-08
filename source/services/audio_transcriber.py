@@ -1,16 +1,16 @@
 import asyncio
 import functools
 import queue
-import numpy as np
-
-from typing import NamedTuple
-from faster_whisper import WhisperModel
 from concurrent.futures import ThreadPoolExecutor
+from typing import NamedTuple
 
-from utils.audio_utils import create_audio_stream
-from .vad import Vad
-from utils.file_utils import write_audio
-from .openai_api import OpenAIAPI
+import numpy as np
+from faster_whisper import WhisperModel
+
+from openai_api import OpenAIAPI
+from source.utils.audio_utils import create_audio_stream
+from source.utils.file_utils import write_audio
+from vad import Vad
 
 
 class AppOptions(NamedTuple):
@@ -25,12 +25,12 @@ class AppOptions(NamedTuple):
 
 class AudioTranscriber:
     def __init__(
-        self,
-        event_loop: asyncio.AbstractEventLoop,
-        whisper_model: WhisperModel,
-        transcribe_settings: dict,
-        app_options: AppOptions,
-        openai_api: OpenAIAPI,
+            self,
+            event_loop: asyncio.AbstractEventLoop,
+            whisper_model: WhisperModel,
+            transcribe_settings: dict,
+            app_options: AppOptions,
+            openai_api: OpenAIAPI,
     ):
         self.event_loop = event_loop
         self.whisper_model: WhisperModel = whisper_model

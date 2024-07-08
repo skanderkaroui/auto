@@ -1,8 +1,9 @@
-import sounddevice as sd
 import io
-import soundfile as sf
-import numpy as np
+
 import librosa
+import numpy as np
+import sounddevice as sd
+import soundfile as sf
 
 
 # get a list of valid input devices
