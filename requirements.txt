@@ -9,6 +9,8 @@ sounddevice
 faster-whisper >= 0.10.0
 sounddevice >= 0.4.6
 pyaudio
+soundfile
+librosa
 
 ### Microsoft Graph API
 requests
