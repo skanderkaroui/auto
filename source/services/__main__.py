@@ -1,4 +1,5 @@
 import asyncio
+import os
 import sys
 import threading
 
@@ -9,6 +10,8 @@ from audio_transcriber import AudioTranscriber
 from openai_api import OpenAIAPI
 from source.utils.audio_utils import get_valid_input_devices, base64_to_audio
 from source.utils.file_utils import read_json, write_json, write_audio
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 transcriber: AudioTranscriber = None
 event_loop: asyncio.AbstractEventLoop = None
@@ -55,14 +58,12 @@ def get_user_settings():
 def start_transcription(user_settings):
     global transcriber, event_loop, thread, openai_api
     try:
-        (
-            filtered_app_settings,
-            filtered_model_settings,
-            filtered_transcribe_settings,
-        ) = extracting_each_setting(user_settings)
-
-        whisper_model = WhisperModel(**filtered_model_settings)
-        app_settings = AppOptions(**filtered_app_settings)
+        whisper_model = WhisperModel(
+            user_settings["model_settings"]["model_size_or_path"],
+            device=user_settings["model_settings"]["compute_type"],
+            device_index=user_settings["app_settings"]["input_device"],
+        )
+        app_settings = AppOptions(**user_settings["app_settings"])
         event_loop = asyncio.new_event_loop()
 
         if app_settings.use_openai_api:
@@ -71,7 +72,7 @@ def start_transcription(user_settings):
         transcriber = AudioTranscriber(
             event_loop,
             whisper_model,
-            filtered_transcribe_settings,
+            user_settings["transcribe_settings"],
             app_settings,
             openai_api,
         )
@@ -191,12 +192,30 @@ def on_close():
 
 
 if __name__ == "__main__":
-    # Place to start the application without eel
     print("Starting the transcription application")
-    # Example usage:
-    # user_settings = get_user_settings()
-    # start_transcription(user_settings)
-    # Simulate application running
+    user_settings = {
+        "app_settings": {
+            "use_openai_api": False,
+            "input_device": 4,
+        },
+        "model_settings": {
+            "model_size_or_path": "base",
+            "compute_type": "auto",
+            "language": "en",
+        },
+        "transcribe_settings": {
+            "no_speech_prob": 0.6,
+            "logprob": -1,
+            "beam_size": 5,
+        },
+    }
+
+    print("User settings:", user_settings)
+
+    start_transcription(user_settings)
+
+    print("Transcription started. Press Ctrl+C to stop.")
+
     try:
         while True:
             pass
