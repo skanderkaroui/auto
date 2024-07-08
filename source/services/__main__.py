@@ -2,6 +2,7 @@ import asyncio
 import os
 import sys
 import threading
+import torch
 
 from faster_whisper import WhisperModel
 
@@ -58,6 +59,17 @@ def get_user_settings():
 def start_transcription(user_settings):
     global transcriber, event_loop, thread, openai_api
     try:
+        if not torch.cuda.is_available():
+            raise RuntimeError("CUDA GPU is not available. Please check your CUDA installation.")
+
+        # Get the total number of GPUs available
+        num_gpus = torch.cuda.device_count()
+
+        # Set the GPU device index
+        device_index = user_settings["app_settings"].get("device_index", 0)
+        if device_index >= num_gpus:
+            raise RuntimeError(f"Invalid GPU device index {device_index}. Available GPUs: {num_gpus}")
+
         whisper_model = WhisperModel(
             user_settings["model_settings"]["model_size_or_path"],
             device=user_settings["model_settings"]["compute_type"],
@@ -115,14 +127,12 @@ def stop_transcription():
 def audio_transcription(user_settings, base64data):
     global transcriber, openai_api
     try:
-        (
-            filtered_app_settings,
-            filtered_model_settings,
-            filtered_transcribe_settings,
-        ) = extracting_each_setting(user_settings)
-
-        whisper_model = WhisperModel(**filtered_model_settings)
-        app_settings = AppOptions(**filtered_app_settings)
+        whisper_model = WhisperModel(
+            user_settings["model_settings"]["model_size_or_path"],
+            device=user_settings["model_settings"]["compute_type"],
+            device_index=user_settings["app_settings"]["input_device"],
+        )
+        app_settings = AppOptions(**user_settings["app_settings"])
 
         if app_settings.use_openai_api:
             openai_api = OpenAIAPI()
@@ -130,7 +140,7 @@ def audio_transcription(user_settings, base64data):
         transcriber = AudioTranscriber(
             event_loop,
             whisper_model,
-            filtered_transcribe_settings,
+            user_settings["transcribe_settings"],
             app_settings,
             openai_api,
         )
