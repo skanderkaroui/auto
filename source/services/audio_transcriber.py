@@ -1,20 +1,20 @@
 import asyncio
 import functools
 import queue
-import numpy as np
-
-from typing import NamedTuple
-from faster_whisper import WhisperModel
 from concurrent.futures import ThreadPoolExecutor
+from typing import NamedTuple
 
-from utils.audio_utils import create_audio_stream
-from .vad import Vad
-from utils.file_utils import write_audio
-from .openai_api import OpenAIAPI
+import numpy as np
+from faster_whisper import WhisperModel
+
+from openai_api import OpenAIAPI
+from source.utils.audio_utils import create_audio_stream
+from source.utils.file_utils import write_audio
+from vad import Vad
 
 
 class AppOptions(NamedTuple):
-    audio_device: int
+    audio_device: int = 1
     silence_limit: int = 8
     noise_threshold: int = 5
     non_speech_threshold: float = 0.1
@@ -25,12 +25,12 @@ class AppOptions(NamedTuple):
 
 class AudioTranscriber:
     def __init__(
-        self,
-        event_loop: asyncio.AbstractEventLoop,
-        whisper_model: WhisperModel,
-        transcribe_settings: dict,
-        app_options: AppOptions,
-        openai_api: OpenAIAPI,
+            self,
+            event_loop: asyncio.AbstractEventLoop,
+            whisper_model: WhisperModel,
+            transcribe_settings: dict,
+            app_options: AppOptions,
+            openai_api: OpenAIAPI,
     ):
         self.event_loop = event_loop
         self.whisper_model: WhisperModel = whisper_model
@@ -112,7 +112,7 @@ class AudioTranscriber:
 
         for segment in segments:
             word_list = []
-            if self.transcribe_settings["word_timestamps"] == True:
+            if self.transcribe_settings["word_timestamps"]:
                 for word in segment.words:
                     word_list.append(
                         {

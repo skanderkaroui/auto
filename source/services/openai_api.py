@@ -1,14 +1,15 @@
 import os
+
 from openai import AzureOpenAI
 
 
 class OpenAIAPI:
     def __init__(self):
         self.azure_client = AzureOpenAI(
-            api_key=os.getenv("AZURE_OPENAI_API_KEY"),  
-            azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"),
+            api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
             api_version="2024-02-01"
-        )        
+        )
         self.MODEL_NAME = "gpt-3.5-turbo"
         self.MAX_TOKENS = 2000
 

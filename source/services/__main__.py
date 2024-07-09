@@ -1,17 +1,23 @@
 import asyncio
+import os
 import sys
 import threading
 
 from faster_whisper import WhisperModel
-from .audio_transcriber import AppOptions
-from .audio_transcriber import AudioTranscriber
-from utils.audio_utils import get_valid_input_devices, base64_to_audio
-from utils.file_utils import read_json, write_json, write_audio
-from .openai_api import OpenAIAPI
+
+from audio_transcriber import AppOptions
+from audio_transcriber import AudioTranscriber
+from openai_api import OpenAIAPI
+from source.utils.audio_utils import get_valid_input_devices, base64_to_audio
+from source.utils.file_utils import read_json, write_json, write_audio
+
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 transcriber: AudioTranscriber = None
 event_loop: asyncio.AbstractEventLoop = None
 thread: threading.Thread = None
+openai_api: OpenAIAPI = None
+
 
 def get_valid_devices():
     devices = get_valid_input_devices()
@@ -23,6 +29,7 @@ def get_valid_devices():
         for d in devices
     ]
 
+
 def get_dropdown_options():
     data_types = ["model_sizes", "compute_types", "languages"]
 
@@ -32,6 +39,7 @@ def get_dropdown_options():
         dropdown_options[data_type] = data[data_type]
 
     return dropdown_options
+
 
 def get_user_settings():
     data_types = ["app_settings", "model_settings", "transcribe_settings"]
@@ -46,17 +54,16 @@ def get_user_settings():
 
     return user_settings
 
+
 def start_transcription(user_settings):
     global transcriber, event_loop, thread, openai_api
     try:
-        (
-            filtered_app_settings,
-            filtered_model_settings,
-            filtered_transcribe_settings,
-        ) = extracting_each_setting(user_settings)
-
-        whisper_model = WhisperModel(**filtered_model_settings)
-        app_settings = AppOptions(**filtered_app_settings)
+        whisper_model = WhisperModel(
+            user_settings["model_settings"]["model_size_or_path"],
+            device=user_settings["model_settings"]["compute_type"],
+            device_index=user_settings["app_settings"]["input_device"],
+        )
+        app_settings = AppOptions(**user_settings["app_settings"])
         event_loop = asyncio.new_event_loop()
 
         if app_settings.use_openai_api:
@@ -65,7 +72,7 @@ def start_transcription(user_settings):
         transcriber = AudioTranscriber(
             event_loop,
             whisper_model,
-            filtered_transcribe_settings,
+            user_settings["transcribe_settings"],
             app_settings,
             openai_api,
         )
@@ -73,9 +80,15 @@ def start_transcription(user_settings):
         thread = threading.Thread(target=event_loop.run_forever, daemon=True)
         thread.start()
 
-        asyncio.run_coroutine_threadsafe(transcriber.start_transcription(), event_loop)
+        transcription_future = asyncio.run_coroutine_threadsafe(
+            transcriber.start_transcription(), event_loop
+        )
+        transcription_result = transcription_future.result()
+        print("Transcription Result:")
+        print(transcription_result)
     except Exception as e:
         print(f"Error: {str(e)}")
+
 
 def stop_transcription():
     global transcriber, event_loop, thread, openai_api
@@ -97,6 +110,7 @@ def stop_transcription():
     openai_api = None
 
     print("Transcription stopped.")
+
 
 def audio_transcription(user_settings, base64data):
     global transcriber, openai_api
@@ -131,17 +145,21 @@ def audio_transcription(user_settings, base64data):
 
     openai_api = None
 
+
 def get_filtered_app_settings(settings):
     valid_keys = AppOptions.__annotations__.keys()
     return {k: v for k, v in settings.items() if k in valid_keys}
+
 
 def get_filtered_model_settings(settings):
     valid_keys = WhisperModel.__init__.__annotations__.keys()
     return {k: v for k, v in settings.items() if k in valid_keys}
 
+
 def get_filtered_transcribe_settings(settings):
     valid_keys = WhisperModel.transcribe.__annotations__.keys()
     return {k: v for k, v in settings.items() if k in valid_keys}
+
 
 def extracting_each_setting(user_settings):
     filtered_app_settings = get_filtered_app_settings(user_settings["app_settings"])
@@ -164,6 +182,7 @@ def extracting_each_setting(user_settings):
 
     return filtered_app_settings, filtered_model_settings, filtered_transcribe_settings
 
+
 def on_close():
     print("Application was closed")
 
@@ -171,13 +190,32 @@ def on_close():
         stop_transcription()
     sys.exit()
 
+
 if __name__ == "__main__":
-    # Place to start the application without eel
     print("Starting the transcription application")
-    # Example usage:
-    # user_settings = get_user_settings()
-    # start_transcription(user_settings)
-    # Simulate application running
+    user_settings = {
+        "app_settings": {
+            "use_openai_api": False,
+            "input_device": 4,
+        },
+        "model_settings": {
+            "model_size_or_path": "base",
+            "compute_type": "auto",
+            "language": "en",
+        },
+        "transcribe_settings": {
+            "no_speech_prob": 0.6,
+            "logprob": -1,
+            "beam_size": 5,
+        },
+    }
+
+    print("User settings:", user_settings)
+
+    start_transcription(user_settings)
+
+    print("Transcription started. Press Ctrl+C to stop.")
+
     try:
         while True:
             pass
