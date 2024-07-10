@@ -20,3 +20,7 @@ onnxruntime~=1.18.1
 requests
 # msal
 # msgraph-sdk
+
+
+### PlayHT (Text to Speech)
+pyht
