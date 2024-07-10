@@ -9,6 +9,7 @@ import sounddevice as sd
 import torch
 from faster_whisper import WhisperModel
 
+from google_txt_to_speech import TextToSpeech
 from openai_api import OpenAIAPI
 
 
@@ -21,6 +22,8 @@ class RealTimeTranscriber:
         self.stop_event = threading.Event()
         self.model = None
         self.openai_api = OpenAIAPI()
+        self.tts = TextToSpeech()
+
 
     def initialize_model(self):
         torch.cuda.empty_cache()
@@ -65,6 +68,8 @@ class RealTimeTranscriber:
             try:
                 response = self.openai_api.response_generation(transcribed_text, first_message=first_message)
                 print("ChatGPT Response: ", response)
+                self.tts.text_to_speech(response)
+
                 first_message = False
             except Exception as e:
                 print("Error sending to ChatGPT: ", str(e))
