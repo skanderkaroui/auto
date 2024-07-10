@@ -25,3 +25,4 @@ requests
 ### PlayHT (Text to Speech)
 # pyht
 # ffmpeg-downloader
+google-cloud-texttospeech
