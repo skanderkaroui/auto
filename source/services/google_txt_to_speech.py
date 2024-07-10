@@ -1,11 +1,12 @@
-import os
+import io
 
+import numpy as np
+import sounddevice as sd
 from google.cloud import texttospeech
+from pydub import AudioSegment
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = "text_to_speech_google_key.json"
 
-
-class TextToSpeech():
+class TextToSpeech:
     def __init__(self):
         self.client = texttospeech.TextToSpeechClient()
 
@@ -25,18 +26,22 @@ class TextToSpeech():
             input=synthesis_input, voice=voice, audio_config=audio_config
         )
 
-        # The response's audio_content is binary.
-        with open("output.mp3", "wb") as out:
-            # Write the response to the output file.
-            out.write(response.audio_content)
-            print('Audio content written to file "output.mp3"')
+        # Convert binary audio content to an audio segment
+        audio_segment = AudioSegment.from_mp3(io.BytesIO(response.audio_content))
 
+        # Convert the audio segment to a numpy array
+        samples = np.array(audio_segment.get_array_of_samples())
 
-if __name__ == "__main__":
-    playht_tts = TextToSpeech()
+        # Play the audio
+        sd.play(samples, samplerate=audio_segment.frame_rate)
+        sd.wait()  # Wait until the audio is done playing
 
-    # Sample text to be converted to speech
-    text = "Hey, this is Jennifer from Play. Please hold on a moment, let me just pull up your details real quick."
-
-    # Convert text to speech
-    TextToSpeech.text_to_speech(text)
+#
+# if __name__ == "__main__":
+#     tts = TextToSpeech()
+#
+#     # Sample text to be converted to speech
+#     text = "Hey, this is Jennifer from Play. Please hold on a moment, let me just pull up your details real quick."
+#
+#     # Convert text to speech
+#     tts.text_to_speech(text)
