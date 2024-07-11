@@ -67,7 +67,7 @@ class RealTimeTranscriber:
             # Send transcribed text to ChatGPT
             try:
                 response = self.openai_api.response_generation(transcribed_text, first_message=first_message)
-                print("ChatGPT Response: ", response)
+                print("auto Response: ", response)
                 self.tts.text_to_speech(response)
 
                 first_message = False
