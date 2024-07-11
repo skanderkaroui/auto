@@ -8,7 +8,7 @@ from faster_whisper import WhisperModel
 
 from audio_transcriber import AppOptions
 from audio_transcriber import AudioTranscriber
-from openai_api import OpenAIAPI
+from txt_to_openai_service import OpenAIAPI
 from source.utils.audio_utils import get_valid_input_devices, base64_to_audio
 from source.utils.file_utils import read_json, write_json, write_audio
 

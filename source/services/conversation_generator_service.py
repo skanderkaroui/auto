@@ -9,11 +9,11 @@ import sounddevice as sd
 import torch
 from faster_whisper import WhisperModel
 
-from google_txt_to_speech import TextToSpeech
-from openai_api import OpenAIAPI
+from google_txt_to_speech_service import TextToSpeech
+from txt_to_openai_service import OpenAIAPI
 
 
-class RealTimeTranscriber:
+class Auto:
     def __init__(self, model_size="base.en", sample_rate=16000, block_size=1024):
         self.model_size = model_size
         self.sample_rate = sample_rate
@@ -101,6 +101,6 @@ class RealTimeTranscriber:
 
 
 if __name__ == "__main__":
-    transcriber = RealTimeTranscriber()
+    transcriber = Auto()
     transcriber.initialize_model()
     transcriber.run()
