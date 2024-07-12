@@ -11,6 +11,7 @@ from faster_whisper import WhisperModel
 
 from google_txt_to_speech_service import TextToSpeech
 from txt_to_openai_service import OpenAIAPI
+from vad import Vad
 
 
 class Auto:
@@ -23,7 +24,9 @@ class Auto:
         self.model = None
         self.openai_api = OpenAIAPI()
         self.tts = TextToSpeech()
+        self.vad = Vad()
 
+        self.first_message = True  # Flag to track the first message
 
     def initialize_model(self):
         torch.cuda.empty_cache()
@@ -46,7 +49,6 @@ class Auto:
 
     def transcribe_audio(self):
         audio_data = []
-        first_message = True
         while not self.stop_event.is_set() or not self.audio_queue.empty():
             try:
                 block = self.audio_queue.get(timeout=1)
@@ -56,6 +58,13 @@ class Auto:
 
         if len(audio_data) > 0:
             audio_data = np.concatenate(audio_data, axis=0).flatten()
+
+            # Only apply VAD if it's not the first message
+            if not self.first_message:
+                if not self.vad.is_speech(audio_data):
+                    print("Silence detected, skipping transcription.")
+                    return
+
             segments, info = self.model.transcribe(audio_data, beam_size=5)
 
             transcribed_text = ""
@@ -66,16 +75,14 @@ class Auto:
 
             # Send transcribed text to ChatGPT
             try:
-                response = self.openai_api.response_generation(transcribed_text, first_message=first_message)
-                print("auto Response: ", response)
+                response = self.openai_api.response_generation(transcribed_text, first_message=self.first_message)
+                print("Auto Response: ", response)
                 self.tts.text_to_speech(response)
+                self.first_message = False  # Update flag after the first message is processed
 
-                first_message = False
             except Exception as e:
                 print("Error sending to ChatGPT: ", str(e))
 
-            # for segment in segments:
-            #     print("[%.2fs -> %.2fs] %s" % (segment.start, segment.end, segment.text))
         print("Transcription stopped.")
 
     def run(self):
