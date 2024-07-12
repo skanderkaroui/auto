@@ -4,11 +4,14 @@ import numpy as np
 import onnxruntime
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+
+print(parent_dir)
 
 
 class Vad:
     def __init__(self, threshold: float = 0.1):
-        model_path = os.path.join(current_dir, "assets", "silero_vad.onnx")
+        model_path = os.path.join(parent_dir, "assets", "silero_vad.onnx")
 
         options = onnxruntime.SessionOptions()
         options.log_severity_level = 4
