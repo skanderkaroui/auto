@@ -25,8 +25,7 @@ class Auto:
         self.openai_api = OpenAIAPI()
         self.tts = TextToSpeech()
         self.vad = Vad()
-
-        self.first_message = True  # Flag to track the first message
+        self.first_message = True
 
     def initialize_model(self):
         torch.cuda.empty_cache()
@@ -59,11 +58,11 @@ class Auto:
         if len(audio_data) > 0:
             audio_data = np.concatenate(audio_data, axis=0).flatten()
 
-            # Only apply VAD if it's not the first message
-            if not self.first_message:
-                if not self.vad.is_speech(audio_data):
-                    print("Silence detected, skipping transcription.")
-                    return
+            # # Only apply VAD if it's not the first message
+            # if not self.first_message:
+            #     if not self.vad.is_speech(audio_data):
+            #         print("Silence detected, skipping transcription.")
+            #         return
 
             segments, info = self.model.transcribe(audio_data, beam_size=5)
 
