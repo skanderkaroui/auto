@@ -18,8 +18,8 @@ onnxruntime~=1.18.1
 
 ### Microsoft Graph API
 requests
-# msal
-# msgraph-sdk
+msal
+msgraph-sdk
 
 
 ### PlayHT (Text to Speech)
