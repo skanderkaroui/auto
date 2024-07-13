@@ -18,7 +18,8 @@ class OpenAIAPI:
 
         if first_message:
             prompt = (
-                "Act as a business meeting assistant named Auto in a dialogue designed to help businesses make better decisions. Ensure responses are extremely brief and suitable for a conversational tone and avoid lists"
+                "Act as a business meeting assistant named Auto in a dialogue designed to help businesses make better decisions. "
+                "Ensure responses are extremely brief and suitable for a conversational tone keep responses under 50 characters"
             )
             messages.append({"role": "system", "content": prompt})
 
