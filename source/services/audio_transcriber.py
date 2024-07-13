@@ -7,9 +7,9 @@ from typing import NamedTuple
 import numpy as np
 from faster_whisper import WhisperModel
 
-from txt_to_openai_service import OpenAIAPI
 from source.utils.audio_utils import create_audio_stream
 from source.utils.file_utils import write_audio
+from txt_to_openai_service import OpenAIAPI
 from vad import Vad
 
 
