@@ -32,6 +32,7 @@ class OpenAIAPI:
 
         return response.choices[0].message.content
 
+
 # def test_openai_api():
 #     # Initialize the OpenAIAPI instance
 #     openai_api = OpenAIAPI()
