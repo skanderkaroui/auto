@@ -28,18 +28,18 @@ chatContainer.innerHTML = `
 
 // Close chat interface
 document.getElementById('close-chat').addEventListener('click', () => {
-  chatContainer.style.display = 'none';
+    chatContainer.style.display = 'none';
 });
 
 // Send message
 document.getElementById('send-message').addEventListener('click', () => {
-  const chatInput = document.getElementById('chat-input');
-  const message = chatInput.value;
-  if (message.trim() !== '') {
-    const chatContent = document.getElementById('chat-gpt-content');
-    chatContent.innerHTML += `<div style="padding: 10px; border-bottom: 1px solid #ccc;">${message}</div>`;
-    chatInput.value = '';
+    const chatInput = document.getElementById('chat-input');
+    const message = chatInput.value;
+    if (message.trim() !== '') {
+        const chatContent = document.getElementById('chat-gpt-content');
+        chatContent.innerHTML += `<div style="padding: 10px; border-bottom: 1px solid #ccc;">${message}</div>`;
+        chatInput.value = '';
 
-    // TODO: Add logic to send message to ChatGPT and display response
-  }
+        // TODO: Add logic to send message to ChatGPT and display response
+    }
 });
