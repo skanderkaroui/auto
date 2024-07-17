@@ -5,7 +5,8 @@
   "description": "auto is a web browser that integrates with Meet in order to chatting abilities inside the meeting",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "declarativeContent"
   ],
   "action": {
     "default_popup": "popup.html",
