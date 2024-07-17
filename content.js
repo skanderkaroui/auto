@@ -67,6 +67,13 @@ document.addEventListener('click', (event) => {
 });
 
 function addAutoChatButton() {
+
+    const existingButton = document.querySelector('button[aria-label="Auto Chat"]');
+    if (existingButton) {
+        return;
+    }
+
+
     // Find the first element with class 'tMdQNe'
     const firstElement = document.querySelector('.tMdQNe');
 
