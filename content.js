@@ -71,46 +71,48 @@ function addAutoChatButton() {
     const firstElement = document.querySelector('.tMdQNe');
 
     if (firstElement) {
-        // Create a new div
-        const newDiv = document.createElement('div');
-        newDiv.setAttribute('jscontroller', 'rYZP8b');
-        newDiv.setAttribute('jsaction', 'JIbuQc:Dikcde;AJZkAd:uKBWVb;ntQuZe:uKBWVb');
-        newDiv.classList.add('r6xAKc');
+        // Create a new div for the chat container
+        const chatContainer = document.createElement('div');
+        chatContainer.classList.add('IxCbn');
+        chatContainer.style.display = 'none'; // Initially hide the chat container
+        chatContainer.setAttribute('jscontroller', 'fIa6jf');
+        chatContainer.setAttribute('jsaction', 'rcuQ6b:dWFD5d;qIX6cf:dWFD5d');
 
-        // Add the button structure inside the new div
-        newDiv.innerHTML = `
-            <span data-is-tooltip-wrapper="true">
-                <button class="VfPpkd-Bz112c-LgbsSe yHy1rc eT1oJ JsuyRc boDUxc"
-                        jscontroller="soHxf"
-                        jsaction="click:cOuCgd; mousedown:UX7yZ; mouseup:lbsD7e; mouseenter:tfO1Yc; mouseleave:JywGue; touchstart:p6p2H; touchmove:FwuNnf; touchend:yfqBxc; touchcancel:JMtRjd; focus:AHmuwe; blur:O22p3e; contextmenu:mg9Pef;mlnRJb:fLiPzd;"
-                        jsname="A5il2e"
-                        data-disable-idom="true"
-                        aria-label="Auto Chat"
-                        data-tooltip-enabled="true"
-                        data-tooltip-id="tt-auto-chat"
-                        aria-pressed="false"
-                        data-panel-id="2">
-                    <div jsname="s3Eaab" class="VfPpkd-Bz112c-Jh9lGc"></div>
-                    <div class="VfPpkd-Bz112c-J1Ukfc-LhBDec"></div>
-                    <i aria-hidden="true" class="google-symbols ebW6mc NtU4hc">auto</i>
-                    <i aria-hidden="true" class="google-symbols hi38gd Mwv9k">auto</i>
-                </button>
-                <div class="EY8ABd-OWXEXe-TAWMXe" role="tooltip" aria-hidden="true" id="tt-auto-chat">Auto Chat</div>
-            </span>
-            <div class="IxCbn spYiI" jscontroller="fIa6jf" jsaction="rcuQ6b:dWFD5d;qIX6cf:dWFD5d" style="display: none;"></div>
+        // Create a new div for the auto chat button
+        const autoChatButton = document.createElement('button');
+        autoChatButton.classList.add('VfPpkd-Bz112c-LgbsSe', 'yHy1rc', 'eT1oJ', 'JsuyRc', 'boDUxc');
+        autoChatButton.setAttribute('jscontroller', 'soHxf');
+        autoChatButton.setAttribute('jsaction', 'click:toggleChatInterface'); // Call toggleChatInterface on click
+        autoChatButton.setAttribute('jsname', 'A5il2e');
+        autoChatButton.setAttribute('data-disable-idom', 'true');
+        autoChatButton.setAttribute('aria-label', 'Auto Chat');
+        autoChatButton.setAttribute('data-tooltip-enabled', 'true');
+        autoChatButton.setAttribute('data-tooltip-id', 'tt-auto-chat');
+        autoChatButton.setAttribute('aria-pressed', 'false');
+        autoChatButton.setAttribute('data-panel-id', '2');
+
+        // Button content (icons)
+        autoChatButton.innerHTML = `
+            <div jsname="s3Eaab" class="VfPpkd-Bz112c-Jh9lGc"></div>
+            <div class="VfPpkd-Bz112c-J1Ukfc-LhBDec"></div>
+            <i aria-hidden="true" class="google-symbols ebW6mc NtU4hc">auto</i>
+            <i aria-hidden="true" class="google-symbols hi38gd Mwv9k">auto</i>
         `;
 
-        // Append the new div inside the first 'tMdQNe' element
-        firstElement.appendChild(newDiv);
+        // Append button and chat container to the new div
+        firstElement.appendChild(autoChatButton);
+        firstElement.appendChild(chatContainer);
 
-        const autoChatButton = newDiv.querySelector('button');
-        const chatContainer = newDiv.querySelector('.IxCbn');
-
+        // Event listener for the auto chat button
         autoChatButton.addEventListener('click', () => {
-            chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
-        })
+            if (chatContainer.style.display === 'none') {
+                // If chat container is hidden, show it and create chat interface
+                chatContainer.style.display = 'block';
+                toggleChatInterface();
+            } else {
+                // If chat container is visible, hide it
+                chatContainer.style.display = 'none';
+            }
+        });
     }
 }
-
-// Call the function to add the auto chat button
-addAutoChatButton();
