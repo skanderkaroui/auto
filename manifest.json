@@ -1,10 +1,30 @@
 {
   "manifest_version": 3,
   "name": "auto Extension",
-  "description": "auto is a web browser that integrates with Meet in order to chatting abilities inside the meeting",
   "version": "1.0",
+  "description": "auto is a web browser that integrates with Meet in order to chatting abilities inside the meeting",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
   "action": {
-    "default_popup": "index.html",
-    "default_icon": "hello_extensions.png"
+    "default_popup": "popup.html",
+    "default_icon": "icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://meet.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
   }
 }
