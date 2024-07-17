@@ -116,3 +116,9 @@ function addAutoChatButton() {
         });
     }
 }
+
+try {
+    addAutoChatButton();
+} catch (error) {
+    console.error('Error loading auto chat button:', error)
+}
