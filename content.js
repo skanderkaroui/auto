@@ -102,6 +102,13 @@ function addAutoChatButton() {
 
         // Append the new div inside the first 'tMdQNe' element
         firstElement.appendChild(newDiv);
+
+        const autoChatButton = newDiv.querySelector('button');
+        const chatContainer = newDiv.querySelector('.IxCbn');
+
+        autoChatButton.addEventListener('click', () => {
+            chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
+        })
     }
 }
 
