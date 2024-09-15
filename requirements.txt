@@ -1,9 +1,7 @@
-### ML model
+### Azure OpenAI
 openai~=1.35.10
-# coqui-tts
-scipy
-sounddevice~=0.4.7
-# google-cloud-speech
+
+### Google Cloud Speech
 numpy<2.0
 google-cloud-texttospeech
 
@@ -16,6 +14,8 @@ librosa~=0.10.2.post1
 torch~=2.3.1+cu118
 numpy~=1.26.3
 onnxruntime~=1.18.1
+scipy
+sounddevice
 
 ### Microsoft Graph API
 requests
