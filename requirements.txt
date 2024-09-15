@@ -4,7 +4,7 @@ openai~=1.35.10
 scipy
 sounddevice~=0.4.7
 # google-cloud-speech
-
+numpy<2.0
 ### fast whisper + pyaudio
 faster-whisper >= 0.10.0
 sounddevice >= 0.4.6
