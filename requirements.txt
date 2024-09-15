@@ -5,13 +5,14 @@ scipy
 sounddevice~=0.4.7
 # google-cloud-speech
 numpy<2.0
+google-cloud-texttospeech
+
 ### fast whisper + pyaudio
 faster-whisper >= 0.10.0
 sounddevice >= 0.4.6
 pyaudio~=0.2.14
 soundfile~=0.12.1
 librosa~=0.10.2.post1
-
 torch~=2.3.1+cu118
 numpy~=1.26.3
 onnxruntime~=1.18.1
@@ -20,9 +21,3 @@ onnxruntime~=1.18.1
 requests
 msal
 msgraph-sdk
-
-
-### PlayHT (Text to Speech)
-# pyht
-# ffmpeg-downloader
-google-cloud-texttospeech
