@@ -96,8 +96,8 @@ Despite efforts to integrate with Microsoft Teams, the **Microsoft Graph API** p
 
 ## References
 
-* Google Cloud Text-to-Speech Documentation
-* Faster Whisper
-* Azure OpenAI Service
+- [Google Cloud Text-to-Speech Documentation](https://cloud.google.com/text-to-speech/docs/create-audio-text-command-line)
+- [Faster Whisper](https://github.com/SYSTRAN/faster-whisper)
+- [Azure OpenAI Service Implementation](https://learn.microsoft.com/en-us/azure/ai-services/openai/chatgpt-quickstart?tabs=command-line%2Cjavascript-keyless%2Ctypescript-keyless%2Cpython-new&pivots=programming-language-python)
 
 Feel free to contribute or raise issues for improvements!
